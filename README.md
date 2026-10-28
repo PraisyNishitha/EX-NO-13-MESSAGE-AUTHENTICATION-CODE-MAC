@@ -26,10 +26,73 @@ To implement MESSAGE AUTHENTICATION CODE(MAC)
 
 ## Program:
 
+```
+#include <stdio.h>
+#include <string.h>
 
+/* Simple hash function */
+int generateHash(char str[])
+{
+    int i;
+    int hash = 0;
+
+    for(i = 0; str[i] != '\0'; i++)
+    {
+        hash = hash + str[i];
+    }
+
+    return hash;
+}
+
+int main()
+{
+    char message[100];
+    char secretKey[100];
+    char combined[200];
+
+    int macSender;
+    int macReceiver;
+
+    printf("Enter Message: ");
+    fgets(message, sizeof(message), stdin);
+
+    printf("Enter Secret Key: ");
+    fgets(secretKey, sizeof(secretKey), stdin);
+
+    /* Remove newline characters */
+    message[strcspn(message, "\n")] = '\0';
+    secretKey[strcspn(secretKey, "\n")] = '\0';
+
+    /* Combine Key and Message */
+    strcpy(combined, secretKey);
+    strcat(combined, message);
+
+    /* MAC Generation */
+    macSender = generateHash(combined);
+
+    printf("\nGenerated MAC: %d\n", macSender);
+
+    /* Receiver Side Verification */
+    macReceiver = generateHash(combined);
+
+    printf("Receiver Computed MAC: %d\n", macReceiver);
+
+    if(macSender == macReceiver)
+    {
+        printf("\nMessage is Authentic and Unchanged.\n");
+    }
+    else
+    {
+        printf("\nMessage Authentication Failed.\n");
+    }
+
+    return 0;
+}
+```
 
 ## Output:
 
+<img width="1900" height="1045" alt="image" src="https://github.com/user-attachments/assets/60705f7b-afef-4e14-a8a9-c46c9ea1b73f" />
 
 ## Result:
 The program is executed successfully.
